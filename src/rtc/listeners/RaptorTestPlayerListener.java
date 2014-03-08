@@ -17,7 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+
 import rtc.RaptorTest;
+import rtc.player.RaptorPlayer;
 
 
 
@@ -39,6 +42,8 @@ public class RaptorTestPlayerListener implements Listener {
 	 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent e){
+		new RaptorPlayer(e.getPlayer());
+		
 		Player player = e.getPlayer();
 		String pl = player.getName();
 		player.sendMessage(ChatColor.GREEN + "Vitaj na serveri RaptorCraft " + pl);
@@ -137,7 +142,11 @@ public class RaptorTestPlayerListener implements Listener {
 	   }
 	}
 	
-	
+	public void onMove(PlayerMoveEvent x){
+	Player p = x.getPlayer();
+		RaptorPlayer.getRaptorPlayer(p);
+		
+	}
 	
 	public RaptorTest getPlugin() {
 		return plugin;

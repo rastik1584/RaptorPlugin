@@ -64,7 +64,8 @@ public class RaptorTestCommandListener implements CommandExecutor {
 				plugin.PrivateMessage((Player) sender , "&cNemas povolenia!");
 			}else{
 				Player k = plugin.getServer().getPlayerExact(args[0]);
-				k.setWalkSpeed(0f);
+				k.getLocation();
+				
 				k.sendMessage("Bol si zamrazený ! ");
 			}
 		}
