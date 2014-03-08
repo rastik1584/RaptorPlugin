@@ -1,0 +1,30 @@
+name: RaptorTest
+main: rtc.RaptorTest
+version: 0.1
+author: rastik1586
+commands:
+   trol:
+      description: trollolo
+      usage: /trol
+      permission: RaptorTest.basic
+      permission-message: You don't have <permission>
+   c:
+      description: Player Location	
+      usage: 
+      permission: RaptorTest.loc
+      permission-message: You don't have <permission>
+   warn:
+      description: Player warn
+      usage:
+      permission: RaptorTest.warn
+      permission-message: You don't have <permission>
+   rtcinfo:
+      description: Player Info 
+      usage:
+      permission: RaptorTest.basic
+      permission-message: You don't have <permission>
+   freeze:
+      description: Player freeze
+      usage:
+      permission: RaptorTest.freeze
+      permission-message: You don't have <permission>
