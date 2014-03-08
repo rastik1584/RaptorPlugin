@@ -12,7 +12,7 @@ public class RaptorPlayer {
 		
 		public static List<RaptorPlayer> players = new LinkedList<RaptorPlayer>();
 		
-		public RaptorPlayer(Player player){
+		private RaptorPlayer(Player player){
 			this.player = player;
 			players.add(this);
 		}
@@ -34,11 +34,18 @@ public class RaptorPlayer {
 		}
 		
 		public static RaptorPlayer getRaptorPlayer(Player player){
+			RaptorPlayer returning = null;
 			for(RaptorPlayer rp : players){
 				if(rp.player.equals(player)){
-					return rp;
+					returning = rp;
+					break;
 				}
 			}
-			return null;
+			
+			if(returning == null) {
+				return new RaptorPlayer(player);
+			} else {
+				return returning;
+			}
 		}
 }
