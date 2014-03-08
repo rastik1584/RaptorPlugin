@@ -30,12 +30,12 @@ public class RaptorTestCommandListener implements CommandExecutor {
 		}
 		
 		
-		if(cmd.getName().equalsIgnoreCase("trol")){ // If the player typed /basic then do the following...
+		if(label.equalsIgnoreCase("trol")){ // If the player typed /basic then do the following...
 			plugin.getServer().broadcastMessage(ChatColor.GREEN+"[RaptorCraft] " + ChatColor.DARK_GREEN + "Trolololololo");
 			return true;
 		}
 		
-		if(cmd.getName().equalsIgnoreCase("c")){
+		if(label.equalsIgnoreCase("c")){
 			Player pSender = (Player) sender;
 			Location position = pSender.getLocation();
 			double x,y,z;
@@ -46,7 +46,7 @@ public class RaptorTestCommandListener implements CommandExecutor {
 			return true;
 		}
 		
-		if(cmd.getName().equalsIgnoreCase("warn")){
+		if(label.equalsIgnoreCase("warn")){
 			if(!plugin.hasPermission((Player) sender, "raptor.warn")){
 				plugin.PrivateMessage((Player) sender, "&cNemas povolenia!");
 			}else{
@@ -59,7 +59,7 @@ public class RaptorTestCommandListener implements CommandExecutor {
 			
 		}
 		
-		if(cmd.getName().equalsIgnoreCase("freeze")){
+		if(label.equalsIgnoreCase("freeze")){
 			if(!plugin.hasPermission((Player) sender, "raptor.freeze")){
 				plugin.PrivateMessage((Player) sender , "&cNemas povolenia!");
 			}else{
@@ -69,7 +69,7 @@ public class RaptorTestCommandListener implements CommandExecutor {
 			}
 		}
 		
-		if(cmd.getName().equalsIgnoreCase("rtcinfo")){
+		if(label.equalsIgnoreCase("rtcinfo")){
 			Player p = (Player) sender;
 			ResultSet x = plugin.db.query("SELECT * FROM rtcplayers WHERE meno = '"+ p.getName() +"'");
 			int m = 0;
