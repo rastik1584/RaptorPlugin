@@ -1,6 +1,8 @@
 package rtc;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -9,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import rtc.listeners.RaptorTestCommandListener;
 import rtc.listeners.RaptorTestPlayerListener;
+import rtc.timer.Timeable;
+import rtc.timer.Timer;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -22,6 +26,8 @@ public class RaptorTest extends JavaPlugin {
 	public RaptorTestPlayerListener loginListener = new RaptorTestPlayerListener(this);
 	public PermissionManager permissionsEx;
 	private static final boolean host = true;
+	
+	public List<Timer> timers = new LinkedList<Timer>();
 
 	public void onEnable(){
 		getLogger().info("Raptor plugin zapnuty");
@@ -54,6 +60,15 @@ public class RaptorTest extends JavaPlugin {
 		}else{
 			getLogger().info("MySQL nepripojena");
 		}
+		
+		Timer mainTimer = new Timer("MainTimer", this);
+		
+		timers.add(mainTimer);
+		
+		mainTimer.parse(this);
+		
+		for(Timer t : timers)
+			this.getServer().getScheduler().runTaskTimer(this, t, 0, 1);
 	}
 	
 	
@@ -63,7 +78,10 @@ public class RaptorTest extends JavaPlugin {
 		getLogger().info("Raptor plugin vypnuty");
 	}
 	
-	
+	@Timeable(period = 5)
+	public void test() {
+		getLogger().info("Raptor plugin vypnuty");
+	}
 	
 	
 	private void setupPermissions() {
