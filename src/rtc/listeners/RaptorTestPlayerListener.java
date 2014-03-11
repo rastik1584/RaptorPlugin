@@ -14,8 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -25,7 +24,6 @@ import rtc.player.RaptorPlayer;
 
 
 
-@SuppressWarnings("deprecation")
 public class RaptorTestPlayerListener implements Listener {
 	private final RaptorTest plugin;
 	public RaptorTestPlayerListener(RaptorTest iplugin) {
@@ -34,8 +32,9 @@ public class RaptorTestPlayerListener implements Listener {
 	
 	 private Map<Player, Location> deaths = new HashMap<Player, Location>();
 	 
+		
 		private static String getDateTime() {
-		    DateFormat dfFormat = new SimpleDateFormat("HH:mm:ss");
+		    DateFormat dfFormat = new SimpleDateFormat("yyyyy-mm-dd HH:mm:ss");
 		    Date dNow = new Date();
 		    return dfFormat.format(dNow);
 		}
@@ -58,9 +57,9 @@ public class RaptorTestPlayerListener implements Listener {
           }
           
 		if(pla != null){
-			plugin.db.query("UPDATE `rtcplayers` SET `lastloginip` = '" + plugin.getIP(player) +"' WHERE meno = '" + pl +"';");
+			plugin.db.query("UPDATE `rtcplayers` SET `lastloginip` = '" + plugin.getIP(player) +"' , lastlogindate = '"+ getDateTime() +"' WHERE meno = '" + pl +"';");
 		}else{
-			plugin.db.query("INSERT INTO rtcplayers (`meno`,`mute`,`iconomy`,`lastloginip`) VALUES ('"+ pl +"','20','0','"+ plugin.getIP(player) +"') ");
+			plugin.db.query("INSERT INTO rtcplayers (`meno`,`mute`,`iconomy`,`lastloginip`,`lastlogindate`) VALUES ('"+ pl +"','20','0','"+ plugin.getIP(player) +"','"+ getDateTime() +"') ");
 		}
 	}
 	
@@ -68,7 +67,7 @@ public class RaptorTestPlayerListener implements Listener {
 	protected Player oldP;
 	protected String oldM;
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerChat(final PlayerChatEvent e){
+	public void onPlayerChat(final AsyncPlayerChatEvent e){
 		if(e.getMessage().equalsIgnoreCase(oldM) && oldP == e.getPlayer()) {
 			Player p = e.getPlayer();
 			e.getMessage();
@@ -91,7 +90,7 @@ public class RaptorTestPlayerListener implements Listener {
 				
 				}else{
 					if(xs <= 0){
-						e.getPlayer().kickPlayer("Bol si kicknuty za SPAM ! ");
+						//e.getPlayer().kickPlayer("Bol si kicknuty za SPAM ! ");
 						plugin.db.query("UPDATE rtcplayers SET mute = '20' WHERE meno = '"+ p.getName() +"'");
 						plugin.getServer().broadcastMessage(ChatColor.GREEN + "[AntiSpam] " + ChatColor.AQUA + "Hrac " + ChatColor.RED + p.getName() + ChatColor.AQUA + " bol kicknuty za spam !" );
 					}
@@ -104,43 +103,14 @@ public class RaptorTestPlayerListener implements Listener {
 	}
 	
 
+	
+	
 	public Location getPlayerDeathLoc(Player p) {
         return deaths.get(p);
     }
 	 
 		
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerDie(PlayerDeathEvent e) {
-	   if(!deaths.containsKey(e.getEntity())) {
-	    deaths.put(e.getEntity(), e.getEntity().getLocation());
-	    String p = e.getEntity().getName();
-	    Location pos = e.getEntity().getLocation();
-	    double x,y,z;
-	    x = pos.getX();
-	    y = pos.getY();
-	    z = pos.getZ();
-	    ResultSet l = plugin.db.query("SELECT nick FROM deaths WHERE nick = '"+ p +"'");
-	    if(l == null){
-	    	plugin.db.query("INSERT INTO deaths (`nick`,`x`,`y`,`z`,`datum`) VALUES ('"+ p +"','"+ x +"','"+ y +"','"+ z +"','"+ getDateTime() +"'");
-	    }else{
-	    	plugin.db.query("UPDATE deaths SET x = '"+ x +"', y = '"+ y +"', z = '"+ z +"', datum = '"+ getDateTime() +"' WHERE nick = '"+ p +"'");
-	    }
-	   } else {
-		   String p = e.getEntity().getName();
-		   Location pos = e.getEntity().getLocation();
-		    double x,y,z;
-		    x = pos.getX();
-		    y = pos.getY();
-		    z = pos.getZ();
-		    ResultSet l = plugin.db.query("SELECT nick FROM deaths WHERE nick = '"+ p +"'");
-		    if(l == null){
-		    	plugin.db.query("INSERT INTO deaths (`nick`,`x`,`y`,`z`,`datum` VALUES ('"+ p +"','"+ x +"','"+ y +"','"+ z +"','"+ getDateTime() +"'");
-		    }else{
-		    	plugin.db.query("UPDATE deaths SET x = '"+ x +"', y = '"+ y +"', z = '"+ z +"', datum = '"+ getDateTime() +"' WHERE nick = '"+ p +"'");
-		    }
-	       deaths.put(e.getEntity(), e.getEntity().getLocation());
-	   }
-	}
+	
 	
 	public void onMove(PlayerMoveEvent x){
 	Player p = x.getPlayer();

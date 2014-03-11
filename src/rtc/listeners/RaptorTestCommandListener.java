@@ -99,9 +99,56 @@ public class RaptorTestCommandListener implements CommandExecutor {
 			
 		}
 		
+		if(label.equalsIgnoreCase("setspawn")){
+			if(!plugin.hasPermission((Player) sender, "rtc.setspawn")){
+				plugin.PrivateMessage((Player) sender, "&cNemas povolenia!");
+			}else{
+				Player h = (Player) sender;
+				Location l = h.getLocation();
+				double x,y,z;
+				x = l.getX();
+				y = l.getY();
+				z = l.getZ();
+				ResultSet i = plugin.db.query("SELECT * FROM spawn");
+				String nn=null;
+				try {
+		              while(i.next()) {
+		                   nn = i.getString("nick");
+		              }
+		          } catch (SQLException e1) {
+		              e1.printStackTrace();
+		          }
+				if(nn != null){
+					plugin.db.query("UPDATE spawn SET x = '"+ x +"' , y = '"+ y +"' , z = '"+ z +"' nick = '"+ h.getName() +"'");
+					h.sendMessage(ChatColor.RED + "RTC>>>" + ChatColor.AQUA +"Spawn bol nastaveny");
+				}else{
+					plugin.db.query("INSERT INTO spawn (`x`,`y`,`z`,`nick`) VALUES ('"+ x +"','"+ y +"','"+ z +"','"+ h.getName() +"')");
+					h.sendMessage(ChatColor.RED + "RTC>>>" + ChatColor.AQUA +"Spawn bol nastaveny");
+				}
+			}
 			
+		}
+		
+		if(label.equalsIgnoreCase("spawn")){
+			Player p = (Player) sender;	
+			ResultSet k = plugin.db.query("SELECT * FROM spawn");
+			double x,y,z;
+			try {
+	              while(k.next()) {
+	                   x = k.getDouble("x");
+	                   y = k.getDouble("y");
+	                   z = k.getDouble("z");
+	              }
+	          } catch (SQLException e1) {
+	              e1.printStackTrace();
+	          }
+			
+		}
+		
 		return false; 
 	}
+	
+	
 
 	public RaptorTest getPlugin() {
 		return plugin;

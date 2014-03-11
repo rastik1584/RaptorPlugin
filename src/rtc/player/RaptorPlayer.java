@@ -12,7 +12,7 @@ public class RaptorPlayer {
 		
 		public static List<RaptorPlayer> players = new LinkedList<RaptorPlayer>();
 		
-		private RaptorPlayer(Player player){
+		public RaptorPlayer(Player player){
 			this.player = player;
 			players.add(this);
 		}
